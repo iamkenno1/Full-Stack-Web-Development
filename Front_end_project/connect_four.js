@@ -5,8 +5,14 @@ var player1Color = 'rgb(86, 151, 255)';
 var player2 = prompt("Player Two: Enter Your Name, you will be Red");
 var player2Color = 'rgb(237, 45, 73)';
 
-var game_on = True;
+var game_on = true;
 var table = $('table tr');
+
+
+
+
+
+
 
 function reportWin(rowNum, colNum){
   console.log("You won at this point" );
@@ -15,18 +21,17 @@ function reportWin(rowNum, colNum){
 }
 
 function changeColor(rowIndex, colIndex, color){
-  return table.eq(rowIndex).find('td').eq(colIndex).find('button').css('background_color', color);
+  return table.eq(rowIndex).find('td').eq(colIndex).find('button').css('background-color', color);
 }
 
 function returnColor(rowIndex, colIndex){
-  return table.eq(rowIndex).find('td').eq(colIndex).find('button').css('background_color', color);
+  return table.eq(rowIndex).find('td').eq(colIndex).find('button').css('background-color');
 }
 
 
 function checkButton(colIndex){
    var color = returnColor(5, colIndex);
-
-   for(var row = 5; row>-1;row--){
+   for(var row = 6; row>-1;row--){
      color = returnColor(row, colIndex);
      if(color === "rgb(128, 128, 128)"){
        return row;
@@ -88,3 +93,35 @@ function checkDiagnolWin(){
     }
   }
 }
+
+
+//start with player1
+
+var curPlayer = 1
+var curName = player1
+var curColor = player1Color
+
+$("p").text(player1+", it's your turn. Pick a column.");
+$(".board button").on("click", function(){
+  var col = $(this).closest("td").index();
+  var availRow = checkButton(col);
+  changeColor(availRow, col, curColor);
+  if(checkHorizontalWin() || checkVerticalWin() || checkDiagnolWin()){
+    $('h1').text(curName+" , YOU WIN");
+    $('h2').fadeOut("fast");
+    $('p').fadeOut("fast");
+  }
+  curPlayer  = curPlayer*-1;
+
+  if(curPlayer === 1){
+    curName = player1;
+    $("p").text(player1+", it's your turn. Pick a column.");
+    curColor = player1Color;
+  }
+  else {
+    curName = player2;
+    $("p").text(player2+", it's your turn. Pick a column.");
+    curColor = player2Color;
+  }
+
+})
